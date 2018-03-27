@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>URL在线检测</title>
+
+    <link rel="stylesheet" href="{{ static_url("css/bootstrap.min.css") }}">
+    <link rel="stylesheet" href="{{ static_url("css/app.css") }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    
+    <style>
+        .loader {
+            position: relative;
+            width: 2.5em;
+            height: 2.5em;
+            transform: rotate(165deg);
+        }
+    
+        .loader:before,
+        .loader:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: block;
+            width: 0.5em;
+            height: 0.5em;
+            border-radius: 0.25em;
+            transform: translate(-50%, -50%);
+        }
+    
+        .loader:before {
+            animation: before 2s infinite;
+        }
+    
+        .loader:after {
+            animation: after 2s infinite;
+        }
+    
+        @keyframes before {
+            0% {
+                width: 0.5em;
+                box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75), -1em 0.5em rgba(111, 202, 220, 0.75);
+            }
+            35% {
+                width: 2.5em;
+                box-shadow: 0 -0.5em rgba(225, 20, 98, 0.75), 0 0.5em rgba(111, 202, 220, 0.75);
+            }
+            70% {
+                width: 0.5em;
+                box-shadow: -1em -0.5em rgba(225, 20, 98, 0.75), 1em 0.5em rgba(111, 202, 220, 0.75);
+            }
+            100% {
+                box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75), -1em 0.5em rgba(111, 202, 220, 0.75);
+            }
+        }
+    
+        @keyframes after {
+            0% {
+                height: 0.5em;
+                box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75), -0.5em -1em rgba(233, 169, 32, 0.75);
+            }
+            35% {
+                height: 2.5em;
+                box-shadow: 0.5em 0 rgba(61, 184, 143, 0.75), -0.5em 0 rgba(233, 169, 32, 0.75);
+            }
+            70% {
+                height: 0.5em;
+                box-shadow: 0.5em -1em rgba(61, 184, 143, 0.75), -0.5em 1em rgba(233, 169, 32, 0.75);
+            }
+            100% {
+                box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75), -0.5em -1em rgba(233, 169, 32, 0.75);
+            }
+        }
+    
+        .loader {
+            position: absolute;
+            top: calc(50% - 1.25em);
+            left: calc(50% - 1.25em);
+        }
+    </style>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            <h1>URL在线检测</h1>
+        </div>
+        <div class="loader" style="display: none"></div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="urls_area">
+                    <form method="post" actions="/">
+                        <div class="form-group">
+                            <textarea name="urls" class="form-control" id="urls_textarea" rows="15" placeholder="一行一个url..."></textarea>
+                        </div>
+                        <button type="submit" onclick="loading()" class="btn btn-dark btn-block">开始检测</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ERROR_URL</th>
+                            <th scope="col">STATUS_CODE</th>
+                            <th scope="col">REASON</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if len(res) == 0 %}
+                            <tr>
+                                <td>无</td>
+                                <td>0</td>
+                                <td>一切正常</td>
+                            </tr>
+                        {% else %}
+                            {% for item in res %}
+                                <tr>
+                                    <td>{{ item["error_url"] }}</td>
+                                    <td>{{ item["status_code"] }}</td>
+                                    <td>{{ item["reason"] }}</td>
+                                </tr>
+                            {% end %}
+                        {% end %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{{ static_url("js/jquery-3.3.1.min.js") }}"></script>
+    <script src="{{ static_url("js/bootstrap.min.js") }}"></script>
+    <script>
+        function loading() {
+            document.querySelector(".loader").style.display = 'block'
+        }
+    </script>
+</body>
+</html>
