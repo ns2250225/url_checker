@@ -28,9 +28,10 @@ class IndexHandler(tornado.web.RequestHandler):
             return False
             
         for url in urls.split('\n'):
-            print(url)
+            tmp_url = url.strip()
+            print(tmp_url)
             try:
-                resp = requests.get(url.strip(), headers=headers, timeout=8, verify=False)
+                resp = requests.get(tmp_url, headers=headers, timeout=8, verify=False)
                 if resp.status_code == requests.codes.ok:
                     print("ok")
                 else:
@@ -59,9 +60,11 @@ if __name__ == '__main__':
             (r'/', IndexHandler)
         ],
         template_path=os.path.join(os.path.dirname(__file__), "templates"),
-        static_path=os.path.join(os.path.dirname(__file__), "statics"),
-        debug=True
+        static_path=os.path.join(os.path.dirname(__file__), "static"),
+        debug=False
     )
     http_server = tornado.httpserver.HTTPServer(app)
-    http_server.listen(options.port)
-    tornado.ioloop.IOLoop.instance().start()
+    # http_server.bind(int(options.port), "0.0.0.0")
+    # http_server.start(0)
+    http_server.listen(8000)
+    tornado.ioloop.IOLoop.current().start()
