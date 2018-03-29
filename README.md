@@ -4,3 +4,4 @@
 # 启动服务
 - pip install -r requirements.txt
 - python app.py
+- 访问 localhost:8000
